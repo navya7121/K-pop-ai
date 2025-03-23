@@ -1,0 +1,95 @@
+import os
+
+# Set your GitHub repository name
+repo_name = "kpop-ai-voice-cover"
+
+# Step 1: Create GitHub Repository
+os.system(f'gh repo create {repo_name} --public --confirm')
+
+# Step 2: Clone Repository Locally
+os.system(f'git clone https://github.com/YOUR_GITHUB_USERNAME/{repo_name}.git')
+
+# Step 3: Change Directory
+os.chdir(repo_name)
+
+# Step 4: Create Website Files
+html_content = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kpop AI Voice Cover</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Kpop AI Voice Cover</h1>
+    </header>
+    <main>
+        <h2>Create AI Voice Covers of K-pop Idols</h2>
+        <p>Upload an audio file or provide a YouTube link.</p>
+        <input type="file" id="audio-file">
+        <input type="text" id="video-url" placeholder="Enter YouTube video link">
+        <button onclick="generateCover()">Generate Cover</button>
+        <p id="output"></p>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
+"""
+
+css_content = """body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+header {
+    background-color: #ff4d4d;
+    color: white;
+    padding: 20px;
+    font-size: 24px;
+}
+input, button {
+    padding: 10px;
+    margin: 10px;
+}
+button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+"""
+
+js_content = """function generateCover() {
+    let videoUrl = document.getElementById('video-url').value;
+    let fileInput = document.getElementById('audio-file').files[0];
+    
+    if (!videoUrl && !fileInput) {
+        document.getElementById('output').innerText = 'Please upload an audio file or enter a YouTube link.';
+        return;
+    }
+    document.getElementById('output').innerText = 'Processing AI cover... (Feature coming soon)';
+}
+"""
+
+# Create files
+with open("index.html", "w") as file:
+    file.write(html_content)
+with open("style.css", "w") as file:
+    file.write(css_content)
+with open("script.js", "w") as file:
+    file.write(js_content)
+
+# Step 5: Upload Files to GitHub
+os.system("git add .")
+os.system('git commit -m "Initial commit"')
+os.system("git branch -M main")
+os.system("git push -u origin main")
+
+# Step 6: Enable GitHub Pages
+os.system(f'gh api -X PATCH /repos/YOUR_GITHUB_USERNAME/{repo_name} -f has_pages=true -f "source[branch]=main" -f "source[path]=/"')
+
+print(f"Website is live at: https://YOUR_GITHUB_USERNAME.github.io/{repo_name}/")
